@@ -1,0 +1,89 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main() {
+    ifstream file("input.txt");
+
+    if (!file) {
+        cout << "File not found" << endl;
+        return 1;
+    }
+
+    string line;
+    int lineNo = 1;
+
+    while (getline(file, line)) {
+        cout << "Line " << lineNo << ":" << endl;
+
+        string token = "";
+
+        for (int i = 0; i < line.length(); i++) {
+            char c = line[i];
+
+            if ((c >= 'a' && c <= 'z') ||
+                (c >= 'A' && c <= 'Z') ||
+                (c >= '0' && c <= '9')) {
+                token = token + c;
+            }
+            else {
+                if (token != "") {
+                    if (token == "int" || token == "float" || token == "double" ||
+                        token == "char" || token == "return" || token == "if" ||
+                        token == "else" || token == "while" || token == "for" ||
+                        token == "cout" || token == "endl") {
+                        cout << token << " -> keyword" << endl;
+                    }
+                    else if (token[0] >= '0' && token[0] <= '9') {
+                        cout << token << " -> number" << endl;
+                    }
+                    else {
+                        cout << token << " -> identifier" << endl;
+                    }
+                    token = "";
+                }
+                if (c == '+' || c == '-' || c == '*' || c == '/' ||
+                    c == '=' || c == '<' || c == '>') {
+                    cout << c << " -> operator" << endl;
+                }
+                else if (c == ';' || c == ',' || c == '(' ||
+                         c == ')' || c == '{' || c == '}') {
+                    cout << c << " -> symbol" << endl;
+                }
+                else if (c == '"') {
+                    string str = "\"";
+                    i++;
+
+                    while (i < line.length() && line[i] != '"') {
+                        str = str + line[i];
+                        i++;
+                    }
+                    str = str + "\"";
+                    cout << str << " -> string" << endl;
+                }
+            }
+        }
+        
+        if (token != "") {
+            if (token == "int" || token == "float" || token == "double" ||
+                token == "char" || token == "return" || token == "if" ||
+                token == "else" || token == "while" || token == "for" ||
+                token == "cout" || token == "endl") {
+
+                cout << token << " -> keyword" << endl;
+            }
+            else if (token[0] >= '0' && token[0] <= '9') {
+                cout << token << " -> number" << endl;
+            }
+            else {
+                cout << token << " -> identifier" << endl;
+            }
+        }
+
+        cout << endl;
+        lineNo++;
+    }
+
+    file.close();
+    return 0;
+}
